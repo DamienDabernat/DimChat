@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">DimChat</string>
+    <string name="nbUserConnected">Nombre d\'utilisateurs connectés :</string>
 </resources>

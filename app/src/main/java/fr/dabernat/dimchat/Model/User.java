@@ -1,19 +1,39 @@
-package fr.dabernat.dimchat.Model;
+package fr.dabernat.dimchat.model;
 
-import android.util.Log;
+import com.google.gson.annotations.SerializedName;
 
 /**
- * Created by Utilisateur on 02/02/2016.
+ * Created by Utilisateur on 08/02/2016.
  */
 public class User {
 
-    public String pseudo;
-    public String password;
-    public String token;
 
-    public User(String pseudo, String password) {
+    private int userID;
+
+    @SerializedName("identifiant")
+    protected String pseudo;
+
+    @SerializedName("lastactivity")
+    private int lastActivity;
+
+    private String imageUrl;
+
+    public User() {
+    }
+
+    public User(int userID, String pseudo, int lastActivity, String imageUrl) {
+        this.userID = userID;
         this.pseudo = pseudo;
-        this.password = password;
+        this.lastActivity = lastActivity;
+        this.imageUrl = imageUrl;
+    }
+
+    public int getUserID() {
+        return userID;
+    }
+
+    public void setUserID(int userID) {
+        this.userID = userID;
     }
 
     public String getPseudo() {
@@ -24,19 +44,19 @@ public class User {
         this.pseudo = pseudo;
     }
 
-    public String getPassword() {
-        return password;
+    public int getLastActivity() {
+        return lastActivity;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setLastActivity(int lastActivity) {
+        this.lastActivity = lastActivity;
     }
 
-    public String getToken() {
-        return token;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
-    public void setToken(String token) {
-        this.token = token;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }

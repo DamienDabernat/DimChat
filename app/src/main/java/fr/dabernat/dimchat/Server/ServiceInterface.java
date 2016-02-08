@@ -1,10 +1,6 @@
-package fr.dabernat.dimchat.Server;
-
-import android.util.Log;
+package fr.dabernat.dimchat.server;
 
 import java.util.HashMap;
-
-import fr.dabernat.dimchat.OnServiceListener;
 
 public class ServiceInterface {
 
@@ -34,7 +30,6 @@ public class ServiceInterface {
             data += "function=" + function;
 
             ServiceProvider gsp = new ServiceProvider(method, SERVER_URL + data, params);
-            Log.w(LOG_TAG, method + " -> " + SERVER_URL + data);
             gsp.setOnWebServiceListener(new OnServiceListener() {
                 @Override
                 public void onResult(String JSON) {

@@ -1,4 +1,4 @@
-package fr.dabernat.dimchat.Server;
+package fr.dabernat.dimchat.server;
 
 import android.os.AsyncTask;
 import android.util.Log;
@@ -12,12 +12,9 @@ import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
-import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
-
-import fr.dabernat.dimchat.OnServiceListener;
 
 public class ServiceProvider extends AsyncTask<String, String, String> {
 
