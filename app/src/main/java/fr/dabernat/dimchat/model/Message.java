@@ -4,6 +4,7 @@ package fr.dabernat.dimchat.model;
 public class Message {
 
     private int userID;
+    private int sendbyme;
     private String username;
     private String message;
     private String date;
@@ -18,6 +19,14 @@ public class Message {
         this.message = message;
         this.date = date;
         this.imageUrl = imageUrl;
+    }
+
+    public int getSendbyme() {
+        return sendbyme;
+    }
+
+    public void setSendbyme(int sendbyme) {
+        this.sendbyme = sendbyme;
     }
 
     public int getUserID() {

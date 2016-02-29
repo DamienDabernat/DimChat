@@ -54,7 +54,7 @@ public class UserTable {
         return database.insert(USER_TABLE, null, newValue);
     }
 
-    private static boolean remove(int id) {
+    public static boolean remove(int id) {
         SQLiteDatabase database = DatabaseHelper.getInstance().getWritableDatabase();
         return database.delete(USER_TABLE, USERID + " = " + id, null) > 0;
     }

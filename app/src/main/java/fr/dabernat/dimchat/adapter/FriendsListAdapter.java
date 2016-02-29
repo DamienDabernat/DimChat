@@ -5,7 +5,6 @@ import android.content.ContextWrapper;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,42 +25,42 @@ import java.util.Collections;
 import java.util.List;
 
 import fr.dabernat.dimchat.R;
-import fr.dabernat.dimchat.model.Channel;
 import fr.dabernat.dimchat.model.CurrentUser;
 import fr.dabernat.dimchat.model.Message;
+import fr.dabernat.dimchat.model.User;
 import fr.dabernat.dimchat.utils.ImageConverter;
 
 /**
  * Created by Utilisateur on 08/02/2016.
  */
-public class MessagingListAdapter extends BaseAdapter {
-
-    private static final String TAG = "MessagingListAdapter";
+public class FriendsListAdapter extends BaseAdapter {
 
     private Context context;
-    private List<Message> messageList;
+    private List<User> userList;
     private LayoutInflater mLayoutInflater;
+    private CurrentUser currentUser;
 
-    public MessagingListAdapter(Context context) {
+    public FriendsListAdapter(Context context, CurrentUser currentUser) {
         mLayoutInflater = LayoutInflater.from(context);
         this.context = context;
-        messageList = new ArrayList<>();
+        this.currentUser = currentUser;
+        userList = new ArrayList<>();
     }
 
-    public void setMessageList(List<Message> messageList) {
-        this.messageList = messageList;
-        Collections.reverse(messageList);
+    public void setUserList(List<User> userList) {
+        this.userList = userList;
+        Collections.reverse(userList);
         notifyDataSetChanged();
     }
 
     @Override
     public int getCount() {
-        return messageList.size();
+        return userList.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return messageList.get(position);
+        return userList.get(position);
     }
 
     @Override
@@ -78,22 +77,16 @@ public class MessagingListAdapter extends BaseAdapter {
         View view = convertView;
         ViewHolder holder = null;
         if (view == null) {
-            Log.w(TAG, "getView: " + messageList.get(position));
-            if(messageList.get(position).getSendbyme() == 1) {
-                view = mLayoutInflater.inflate(R.layout.adapter_messaging_from_current_user, parent, false);
-            } else {
-                view = mLayoutInflater.inflate(R.layout.adapter_messaging, parent, false);
-            }
+            view = mLayoutInflater.inflate(R.layout.adapter_friends, parent, false);
             holder = new ViewHolder(view);
             view.setTag(holder);
         } else {
             holder = (ViewHolder) view.getTag();
         }
 
-        holder.tvText.setText(messageList.get(position).getMessage());
-        holder.tvPseudo.setText(" " + messageList.get(position).getUsername());
-        holder.tvDate.setText(" le : " + messageList.get(position).getDate());
-        String url = messageList.get(position).getImageUrl();
+        holder.tvPseudo.setText(userList.get(position).getPseudo());
+        holder.tvDate.setText(" " + userList.get(position).getLastActivity());
+        String url = userList.get(position).getImageUrl();
         if(!url.isEmpty()) {
             String fileName = url.substring( url.lastIndexOf('/')+1, url.length() );
             String fileNameWithoutExtn = fileName.substring(0, fileName.lastIndexOf('.'));
@@ -114,16 +107,13 @@ public class MessagingListAdapter extends BaseAdapter {
     static class ViewHolder {
 
         ImageView ivProfil;
-        TextView tvText;
         TextView tvPseudo;
         TextView tvDate;
 
         public ViewHolder(View view) {
             ivProfil = (ImageView) view.findViewById(R.id.ivProfil);
-            tvText = (TextView) view.findViewById(R.id.tvText);
             tvPseudo = (TextView) view.findViewById(R.id.tvPseudo);
             tvDate = (TextView) view.findViewById(R.id.tvDate);
-
         }
 
     }

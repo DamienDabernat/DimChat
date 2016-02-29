@@ -2,10 +2,12 @@ package fr.dabernat.dimchat.model;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
+
 /**
  * Created by Utilisateur on 08/02/2016.
  */
-public class User {
+public class User implements Serializable {
 
 
     private int userID;
@@ -14,7 +16,7 @@ public class User {
     protected String pseudo;
 
     @SerializedName("lastactivity")
-    private int lastActivity;
+    private String lastActivity;
 
     private String imageUrl;
 
@@ -27,7 +29,7 @@ public class User {
         this.imageUrl = imageUrl;
     }
 
-    public User(int userID, String pseudo, int lastActivity, String imageUrl) {
+    public User(int userID, String pseudo, String lastActivity, String imageUrl) {
         this.userID = userID;
         this.pseudo = pseudo;
         this.lastActivity = lastActivity;
@@ -50,11 +52,11 @@ public class User {
         this.pseudo = pseudo;
     }
 
-    public int getLastActivity() {
+    public String getLastActivity() {
         return lastActivity;
     }
 
-    public void setLastActivity(int lastActivity) {
+    public void setLastActivity(String lastActivity) {
         this.lastActivity = lastActivity;
     }
 

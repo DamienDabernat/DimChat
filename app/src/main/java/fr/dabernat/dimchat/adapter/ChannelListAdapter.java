@@ -12,9 +12,6 @@ import java.util.List;
 import fr.dabernat.dimchat.R;
 import fr.dabernat.dimchat.model.Channel;
 
-/**
- * Created by Utilisateur on 08/02/2016.
- */
 public class ChannelListAdapter extends BaseAdapter {
 
     private Context context;
@@ -51,7 +48,7 @@ public class ChannelListAdapter extends BaseAdapter {
         TextView description = (TextView) view.findViewById(R.id.tvDescription);
 
         name.setText(channelList.get(position).getName());
-        description.setText(" " + channelList.get(position).getConectedUsers());
+        description.setText("Nombre de participant : " + channelList.get(position).getConnectedUsers());
 
         return view;
     }

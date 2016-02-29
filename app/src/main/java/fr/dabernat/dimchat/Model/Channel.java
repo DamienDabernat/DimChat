@@ -1,5 +1,7 @@
 package fr.dabernat.dimchat.model;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
 
 /**
@@ -9,15 +11,17 @@ public class Channel implements Serializable {
 
     private int channelID;
     private String name;
-    private int conectedUsers;
+
+    @SerializedName("connectedusers")
+    private int connectedUsers;
 
     public Channel() {
     }
 
-    public Channel(int channelID, String name, int conectedUsers) {
+    public Channel(int channelID, String name, int connectedUsers) {
         this.channelID = channelID;
         this.name = name;
-        this.conectedUsers = conectedUsers;
+        this.connectedUsers = connectedUsers;
     }
 
     public int getChannelID() {
@@ -36,12 +40,12 @@ public class Channel implements Serializable {
         this.name = name;
     }
 
-    public int getConectedUsers() {
-        return conectedUsers;
+    public int getConnectedUsers() {
+        return connectedUsers;
     }
 
-    public void setConectedUsers(int conectedUsers) {
-        this.conectedUsers = conectedUsers;
+    public void setConnectedUsers(int connectedUsers) {
+        this.connectedUsers = connectedUsers;
     }
 
     @Override
@@ -49,7 +53,7 @@ public class Channel implements Serializable {
         return "Channel{" +
                 "channelID=" + channelID +
                 ", name='" + name + '\'' +
-                ", conectedUsers=" + conectedUsers +
+                ", connectedUsers=" + connectedUsers +
                 '}';
     }
 }

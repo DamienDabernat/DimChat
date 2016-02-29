@@ -78,6 +78,7 @@ public class LoginActivity extends AppCompatActivity {
                         JSONObject json = new JSONObject(response);
                         int statusCode = Integer.parseInt(json.get("code").toString());
                         if (statusCode == 200) {
+                            Log.w(TAG, "onResult: " + response );
                             prefs.edit().putString("token", json.get("accesstoken").toString()).apply();
                             currentUser.setToken(json.get("accesstoken").toString());
                             Intent channelListIntent = new Intent(LoginActivity.this, ChannelListActivity.class);

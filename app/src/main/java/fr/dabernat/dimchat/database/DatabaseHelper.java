@@ -10,10 +10,8 @@ import fr.dabernat.dimchat.database.table.UserTable;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
-    private static DatabaseHelper sInstance;
-
     private static final String DATABASE_NAME = "dimchat.db";
-    private static final int DATABASE_VERSION = 0;
+    private static final int DATABASE_VERSION = 2;
 
     // private variable which is going to store the singlton object of this class and return it to caller
     private static DatabaseHelper dbHelper = null;
@@ -24,14 +22,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static DatabaseHelper getInstance(){
         if(dbHelper==null){
             dbHelper = new DatabaseHelper(ApplicationManager.getContext());
-            openConnecion();
+            openConnexion();
         }
            return dbHelper;
     }
 
     private DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
-        // storing the object of this class to dbHelper
         dbHelper = this;
     }
 
@@ -52,7 +49,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     // will be called only once when singleton is created
-    private static void openConnecion(){
+    private static void openConnexion(){
         if ( db == null ){
             db = dbHelper.getWritableDatabase();
         }
