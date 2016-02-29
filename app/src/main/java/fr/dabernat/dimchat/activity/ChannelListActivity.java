@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 
 import com.google.gson.Gson;
@@ -21,6 +22,8 @@ import fr.dabernat.dimchat.server.ServiceInterface;
 
 public class ChannelListActivity extends AppCompatActivity {
 
+
+    private Button btFriends;
     private ListView lvChannel;
     private ChannelListAdapter channelAdapter;
 
@@ -30,6 +33,7 @@ public class ChannelListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_channel_list);
         final CurrentUser currentUser = (CurrentUser) getIntent().getSerializableExtra("currentUser");
 
+        btFriends = (Button) findViewById(R.id.btFriends);
         lvChannel = (ListView) findViewById(R.id.lvChannel);
 
         HashMap<String, String> params = new HashMap<>();
@@ -54,8 +58,18 @@ public class ChannelListActivity extends AppCompatActivity {
                 messagingIntent.putExtra("channel", (Channel) channelAdapter.getItem(position));
                 messagingIntent.putExtra("currentUser", currentUser);
                 startActivity(messagingIntent);
-
             }
         });
+
+        btFriends.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent friendsIntent = new Intent(getApplicationContext(), FriendsActivity.class);
+                friendsIntent.putExtra("currentUser", currentUser);
+                startActivity(friendsIntent);
+            }
+        });
+
+
     }
 }

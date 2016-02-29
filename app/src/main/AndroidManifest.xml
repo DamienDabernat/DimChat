@@ -18,7 +18,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.ChannelListActivity" />
-        <activity android:name=".activity.MessagingActivity"></activity>
+        <activity android:name=".activity.MessagingActivity" />
+        <activity android:name=".activity.FriendsActivity"></activity>
     </application>
 
 </manifest>

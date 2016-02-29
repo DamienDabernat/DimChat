@@ -21,6 +21,12 @@ public class User {
     public User() {
     }
 
+    public User(int userID, String pseudo, String imageUrl) {
+        this.userID = userID;
+        this.pseudo = pseudo;
+        this.imageUrl = imageUrl;
+    }
+
     public User(int userID, String pseudo, int lastActivity, String imageUrl) {
         this.userID = userID;
         this.pseudo = pseudo;

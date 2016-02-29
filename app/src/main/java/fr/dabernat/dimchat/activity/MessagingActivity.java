@@ -78,7 +78,6 @@ public class MessagingActivity extends AppCompatActivity {
                 if(!response.isEmpty()) {
                     Gson gson = new Gson();
                     MessageList messageList = gson.fromJson(response, MessageList.class);
-                    Log.wtf(TAG, messageList.toString());
                     messagingListAdapter.setMessageList(messageList.getMessageList());
                     if(firstLaunch) {
                         lvMessage.setSelection(messagingListAdapter.getCount() - 1);
