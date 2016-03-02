@@ -76,7 +76,7 @@ public class ServiceProvider extends AsyncTask<String, String, String> {
             httpConn.setAllowUserInteraction(false);
             httpConn.setInstanceFollowRedirects(true);
 
-            if (method == "POST" || method == "PUT" || method == "DELETE") {
+            if (method.equals("POST") || method.equals("PUT") || method.equals("DELETE")) {
                 httpConn.setRequestMethod(method);
                 httpConn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
 
@@ -105,7 +105,7 @@ public class ServiceProvider extends AsyncTask<String, String, String> {
             response = "{\"data\":\"no_response (internal error)\",\"status\":\"error\"}";
         }
 
-        Log.w("Serveur", "\n" + method + " -> " + urlString + "\n" + "\nReponse : " + response + "\n\n");
+        //Log.w("Serveur", "\n" + method + " -> " + urlString + "\n" + "\nReponse : " + response + "\n\n");
 
         listener.onResult(response);
     }

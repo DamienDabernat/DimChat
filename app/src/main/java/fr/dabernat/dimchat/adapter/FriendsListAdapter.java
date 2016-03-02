@@ -71,9 +71,6 @@ public class FriendsListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        LayoutInflater inflater = (LayoutInflater) context
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
         View view = convertView;
         ViewHolder holder = null;
         if (view == null) {
@@ -85,7 +82,6 @@ public class FriendsListAdapter extends BaseAdapter {
         }
 
         holder.tvPseudo.setText(userList.get(position).getPseudo());
-        holder.tvDate.setText(" " + userList.get(position).getLastActivity());
         String url = userList.get(position).getImageUrl();
         if(!url.isEmpty()) {
             String fileName = url.substring( url.lastIndexOf('/')+1, url.length() );
@@ -108,12 +104,10 @@ public class FriendsListAdapter extends BaseAdapter {
 
         ImageView ivProfil;
         TextView tvPseudo;
-        TextView tvDate;
 
         public ViewHolder(View view) {
             ivProfil = (ImageView) view.findViewById(R.id.ivProfil);
             tvPseudo = (TextView) view.findViewById(R.id.tvPseudo);
-            tvDate = (TextView) view.findViewById(R.id.tvDate);
         }
 
     }

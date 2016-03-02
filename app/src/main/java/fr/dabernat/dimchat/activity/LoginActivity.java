@@ -9,6 +9,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+
+import com.victor.loading.newton.NewtonCradleLoading;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -25,10 +28,23 @@ public class LoginActivity extends AppCompatActivity {
 
     private static final String TAG = "LoginActivity";
 
+    private LinearLayout llLoading;
+    private LinearLayout llConnexion;
+    private NewtonCradleLoading newtonCradleLoading;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        llLoading = (LinearLayout) findViewById(R.id.llLoading);
+        newtonCradleLoading = (NewtonCradleLoading) findViewById(R.id.newton_cradle_loading);
+        newtonCradleLoading.start();
+
+        llConnexion = (LinearLayout) findViewById(R.id.llConnexion);
+
+        llConnexion.setVisibility(View.VISIBLE);
+        llLoading.setVisibility(View.INVISIBLE);
 
         final SharedPreferences prefs = this.getSharedPreferences(
                 "fr.dabernat.dimchat", Context.MODE_PRIVATE);
@@ -63,6 +79,8 @@ public class LoginActivity extends AppCompatActivity {
 
     private void connect(final SharedPreferences prefs, final CurrentUser currentUser) {
         if( !currentUser.getPseudo().isEmpty() && !currentUser.getPassword().isEmpty()) {
+            llConnexion.setVisibility(View.INVISIBLE);
+            llLoading.setVisibility(View.VISIBLE);
             HashMap<String, String> params = new HashMap<>();
             params.put("username", currentUser.getPseudo());
             params.put("password", currentUser.getPassword());
@@ -81,10 +99,13 @@ public class LoginActivity extends AppCompatActivity {
                             Log.w(TAG, "onResult: " + response );
                             prefs.edit().putString("token", json.get("accesstoken").toString()).apply();
                             currentUser.setToken(json.get("accesstoken").toString());
-                            Intent channelListIntent = new Intent(LoginActivity.this, ChannelListActivity.class);
+                            Intent channelListIntent = new Intent(LoginActivity.this, ChatFragmentActivity.class);
                             channelListIntent.putExtra("currentUser", currentUser);
                             startActivity(channelListIntent);
                             finish();
+                        } else {
+                            llConnexion.setVisibility(View.VISIBLE);
+                            llLoading.setVisibility(View.INVISIBLE);
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -92,6 +113,7 @@ public class LoginActivity extends AppCompatActivity {
                 }
             });
             serviceInterface.execute();
+
         }
     }
 }

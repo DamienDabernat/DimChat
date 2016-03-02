@@ -3,8 +3,9 @@
     <color name="colorPrimaryLight">#FF8989</color>
     <color name="red">#F14848</color>
     <color name="yellow">#f6bb42</color>
-    <color name="colorAccent">#A0D468</color>
-    <color name="colorPrimary">#4A90E2</color>
+    <color name="colorAccent">#ffffff</color>
+    <!--<color name="colorAccent">#a0d468</color>-->
+    <color name="colorPrimary">#4a90e2</color>
     <color name="colorPrimaryDark">#3e7bc3</color>
     <color name="brown">#8B572A</color>
 

@@ -11,7 +11,7 @@ import fr.dabernat.dimchat.database.table.UserTable;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "dimchat.db";
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
 
     // private variable which is going to store the singlton object of this class and return it to caller
     private static DatabaseHelper dbHelper = null;

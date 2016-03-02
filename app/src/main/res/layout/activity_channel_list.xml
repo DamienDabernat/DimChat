@@ -15,7 +15,7 @@
 
     <Button
         android:layout_width="match_parent"
-        android:layout_height="45dp"
+        android:layout_height="55dp"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Voir mes amis"
         android:id="@+id/btFriends"
@@ -25,4 +25,20 @@
         android:background="@color/yellow"
         android:gravity="center"
         android:textStyle="bold" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorPrimary"
+        android:id="@+id/rlLoading">
+
+        <com.victor.loading.newton.NewtonCradleLoading
+            android:id="@+id/newton_cradle_loading"
+            android:layout_width="wrap_content"
+            android:layout_height="150dp"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            />
+    </RelativeLayout>
+
 </RelativeLayout>

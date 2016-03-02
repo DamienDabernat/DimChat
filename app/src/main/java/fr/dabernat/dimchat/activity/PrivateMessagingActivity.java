@@ -5,16 +5,22 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 
 import com.google.gson.Gson;
+import com.victor.loading.newton.NewtonCradleLoading;
 
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 
 import fr.dabernat.dimchat.R;
 import fr.dabernat.dimchat.adapter.MessagingListAdapter;
@@ -27,10 +33,12 @@ import fr.dabernat.dimchat.model.User;
 import fr.dabernat.dimchat.server.OnServiceListener;
 import fr.dabernat.dimchat.server.ServiceInterface;
 
-public class PrivateMessagingActivity extends Activity {
+public class PrivateMessagingActivity extends AppCompatActivity {
 
     private static final String TAG = "MessagingActivity";
     private ListView lvMessage;
+    private NewtonCradleLoading newtonCradleLoading;
+    private RelativeLayout rlLoading;
     private User userFriend;
     private CurrentUser currentUser;
     private MessagingListAdapter messagingListAdapter;
@@ -46,12 +54,24 @@ public class PrivateMessagingActivity extends Activity {
         currentUser = (CurrentUser) getIntent().getSerializableExtra("currentUser");
         userFriend = (User) getIntent().getSerializableExtra("userFriend");
 
+        rlLoading = (RelativeLayout) findViewById(R.id.rlLoading);
+        newtonCradleLoading = (NewtonCradleLoading) findViewById(R.id.newton_cradle_loading);
+        newtonCradleLoading.start();
+
         lvMessage = (ListView) findViewById(R.id.lvMessage);
         messagingListAdapter = new MessagingListAdapter(getApplicationContext());
         lvMessage.setAdapter(messagingListAdapter);
 
         final EditText etMessage = (EditText) findViewById(R.id.etMessage);
-        Button btSend = (Button) findViewById(R.id.btSend);
+
+        etMessage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                lvMessage.setSelection(messagingListAdapter.getCount() - 1);
+            }
+        });
+
+        ImageButton btSend = (ImageButton) findViewById(R.id.btSend);
         btSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -82,9 +102,14 @@ public class PrivateMessagingActivity extends Activity {
             @Override
             public void onResult(String response) {
                 if(!response.isEmpty()) {
+                    newtonCradleLoading.stop();
+                    rlLoading.setVisibility(View.INVISIBLE);
                     Gson gson = new Gson();
                     MessageList messageList = gson.fromJson(response, MessageList.class);
-                    messagingListAdapter.setMessageList(messageList.getMessageList());
+                    List<Message> messages = messageList.getMessageList();
+                    Collections.reverse(messages);
+                    messagingListAdapter.setMessageList(messages);
+                    messagingListAdapter.notifyDataSetChanged();
                     if(firstLaunch) {
                         lvMessage.setSelection(messagingListAdapter.getCount() - 1);
                         firstLaunch = false;

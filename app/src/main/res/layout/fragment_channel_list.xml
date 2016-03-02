@@ -1,0 +1,50 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="fr.dabernat.dimchat.fragment.ChannelListFragment">
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".activity.ChatFragmentActivity">
+
+        <ListView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/lvChannel"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_above="@+id/btFriends" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Voir mes amis"
+            android:id="@+id/btFriends"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:textColor="#FFFFFF"
+            android:background="@color/yellow"
+            android:gravity="center"
+            android:textStyle="bold" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/colorPrimary"
+            android:id="@+id/rlLoading">
+
+            <com.victor.loading.newton.NewtonCradleLoading
+                android:id="@+id/newton_cradle_loading"
+                android:layout_width="wrap_content"
+                android:layout_height="150dp"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"
+                />
+        </RelativeLayout>
+
+    </RelativeLayout>
+</FrameLayout>

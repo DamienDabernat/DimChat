@@ -18,10 +18,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.ChannelListActivity" />
-        <activity android:name=".activity.MessagingActivity" />
+        <activity
+            android:name=".activity.MessagingActivity"
+            android:parentActivityName=".activity.ChatFragmentActivity"
+            android:windowSoftInputMode="stateHidden" />
         <activity android:name=".activity.FriendsActivity" />
-        <activity android:name=".activity.PrivateMessagingActivity" />
+        <activity
+            android:name=".activity.PrivateMessagingActivity"
+            android:parentActivityName=".activity.ChatFragmentActivity"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".activity.ChatFragmentActivity"
+            android:label="@string/title_chat_fragment_activity" />
     </application>
 
 </manifest>

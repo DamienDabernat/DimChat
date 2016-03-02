@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.ChatFragmentActivity">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:weightSum="12"
+        android:gravity="center">
+
+        <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/fragment_container_side"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="8" />
+
+        <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/fragment_container_main"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="4" />
+
+    <!--<fragment android:name="fr.dabernat.dimchat.fragment.ChannelListFragment"-->
+        <!--android:id="@+id/channel_fragment"-->
+        <!--android:layout_width="fill_parent"-->
+        <!--android:layout_height="fill_parent"-->
+        <!--android:layout_weight="8" />-->
+
+    <!--<fragment android:name="fr.dabernat.dimchat.fragment.MessageFragment"-->
+        <!--android:id="@+id/message_fragment"-->
+        <!--android:layout_width="fill_parent"-->
+        <!--android:layout_height="fill_parent"-->
+        <!--android:layout_weight="4" />-->
+
+    </LinearLayout>
+
+</RelativeLayout>

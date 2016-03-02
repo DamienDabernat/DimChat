@@ -4,8 +4,8 @@ import android.content.Context;
 import android.content.ContextWrapper;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,12 +22,9 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import fr.dabernat.dimchat.R;
-import fr.dabernat.dimchat.model.Channel;
-import fr.dabernat.dimchat.model.CurrentUser;
 import fr.dabernat.dimchat.model.Message;
 import fr.dabernat.dimchat.utils.ImageConverter;
 
@@ -50,8 +47,16 @@ public class MessagingListAdapter extends BaseAdapter {
 
     public void setMessageList(List<Message> messageList) {
         this.messageList = messageList;
-        Collections.reverse(messageList);
-        notifyDataSetChanged();
+    }
+
+    public void addList(List<Message> messageList) {
+        for (Message message : messageList) {
+            this.messageList.add(message);
+        }
+    }
+
+    public List<Message> getList() {
+        return messageList;
     }
 
     @Override
@@ -78,8 +83,7 @@ public class MessagingListAdapter extends BaseAdapter {
         View view = convertView;
         ViewHolder holder = null;
         if (view == null) {
-            Log.w(TAG, "getView: " + messageList.get(position));
-            if(messageList.get(position).getSendbyme() == 1) {
+            if (messageList.get(position).getSendbyme() == 1) {
                 view = mLayoutInflater.inflate(R.layout.adapter_messaging_from_current_user, parent, false);
             } else {
                 view = mLayoutInflater.inflate(R.layout.adapter_messaging, parent, false);
@@ -91,16 +95,23 @@ public class MessagingListAdapter extends BaseAdapter {
         }
 
         holder.tvText.setText(messageList.get(position).getMessage());
+
+        if (messageList.get(position).getEverRead() == 0) {
+            holder.tvText.setTypeface(null, Typeface.BOLD);
+        } else {
+            holder.tvText.setTypeface(null, Typeface.NORMAL);
+        }
+
         holder.tvPseudo.setText(" " + messageList.get(position).getUsername());
         holder.tvDate.setText(" le : " + messageList.get(position).getDate());
         String url = messageList.get(position).getImageUrl();
-        if(!url.isEmpty()) {
-            String fileName = url.substring( url.lastIndexOf('/')+1, url.length() );
+        if (!url.isEmpty()) {
+            String fileName = url.substring(url.lastIndexOf('/') + 1, url.length());
             String fileNameWithoutExtn = fileName.substring(0, fileName.lastIndexOf('.'));
             ContextWrapper cw = new ContextWrapper(context);
             File directory = cw.getDir("DimChat", Context.MODE_PRIVATE);
             Bitmap photoProfil = loadImageFromStorage(directory.getPath(), fileNameWithoutExtn);
-            if( photoProfil != null) {
+            if (photoProfil != null) {
                 photoProfil = ImageConverter.getRoundedCornerBitmap(photoProfil, 50);
                 holder.ivProfil.setImageBitmap(photoProfil);
             } else {
@@ -109,6 +120,51 @@ public class MessagingListAdapter extends BaseAdapter {
         }
 
         return view;
+    }
+
+    public Bitmap getBitmapFromURL(String src, String fileName) {
+        try {
+            URL url = new URL(src);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setDoInput(true);
+            connection.connect();
+            InputStream input = connection.getInputStream();
+            Bitmap myBitmap = BitmapFactory.decodeStream(input);
+            saveToInternalStorage(myBitmap, fileName);
+            return myBitmap;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private String saveToInternalStorage(Bitmap bitmapImage, String fileName) {
+        ContextWrapper cw = new ContextWrapper(context);
+        // path to /data/data/yourapp/app_data/imageDir
+        File directory = cw.getDir("DimChat", Context.MODE_PRIVATE);
+        // Create imageDir
+        File mypath = new File(directory, fileName + ".png");
+
+        FileOutputStream fos = null;
+        try {
+            fos = new FileOutputStream(mypath);
+            if (bitmapImage != null) {
+                bitmapImage.compress(Bitmap.CompressFormat.JPEG, 80, fos);
+            }
+            fos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return directory.getAbsolutePath();
+    }
+
+    private Bitmap loadImageFromStorage(String path, String fileName) {
+        try {
+            File f = new File(path, fileName + ".png");
+            return BitmapFactory.decodeStream(new FileInputStream(f));
+        } catch (FileNotFoundException e) {
+            return null;
+        }
     }
 
     static class ViewHolder {
@@ -148,53 +204,6 @@ public class MessagingListAdapter extends BaseAdapter {
         @Override
         protected void onPostExecute(Bitmap result) {
             imageView.setImageBitmap(result);
-        }
-    }
-
-
-    public Bitmap getBitmapFromURL(String src, String fileName) {
-        try {
-            URL url = new URL(src);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setDoInput(true);
-            connection.connect();
-            InputStream input = connection.getInputStream();
-            Bitmap myBitmap = BitmapFactory.decodeStream(input);
-            saveToInternalStorage(myBitmap, fileName);
-            return myBitmap;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    private String saveToInternalStorage(Bitmap bitmapImage, String fileName) {
-        ContextWrapper cw = new ContextWrapper(context);
-        // path to /data/data/yourapp/app_data/imageDir
-        File directory = cw.getDir("DimChat", Context.MODE_PRIVATE);
-        // Create imageDir
-        File mypath=new File(directory, fileName + ".png");
-
-        FileOutputStream fos = null;
-        try {
-            fos = new FileOutputStream(mypath);
-            bitmapImage.compress(Bitmap.CompressFormat.JPEG, 80, fos);
-            fos.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return directory.getAbsolutePath();
-    }
-
-    private Bitmap loadImageFromStorage(String path, String fileName)
-    {
-        try {
-            File f = new File(path, fileName + ".png");
-            return BitmapFactory.decodeStream(new FileInputStream(f));
-        }
-        catch (FileNotFoundException e)
-        {
-            return null;
         }
     }
 
