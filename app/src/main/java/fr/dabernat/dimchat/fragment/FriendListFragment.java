@@ -99,17 +99,6 @@ public class FriendListFragment extends Fragment {
 
             glFriends.setOnItemClickListener(((ChatFragmentActivity) getActivity()).onGvFriendItemClick);
 
-//            glFriends.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//                @Override
-//                public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
-//                    Intent privateMessageIntent = new Intent(getActivity(), PrivateMessagingActivity.class);
-//                    User user = (User) friendsListAdapter.getItem(position);
-//                    privateMessageIntent.putExtra("userFriend", user);
-//                    privateMessageIntent.putExtra("currentUser", currentUser);
-//                    startActivity(privateMessageIntent);
-//                }
-//            });
-
             glFriends.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
                 @Override
                 public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
@@ -138,13 +127,6 @@ public class FriendListFragment extends Fragment {
 
         return view;
     }
-
-//    // TODO: Rename method, update argument and hook method into UI event
-//    public void onButtonPressed(Uri uri) {
-//        if (mListener != null) {
-//            mListener.onFragmentInteraction(uri);
-//        }
-//    }
 
     @Override
     public void onAttach(Context context) {

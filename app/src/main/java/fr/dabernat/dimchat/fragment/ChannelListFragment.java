@@ -106,33 +106,9 @@ public class ChannelListFragment extends Fragment implements SearchView.OnQueryT
 
         getChannelList();
 
-//        lvChannel.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                // Create fragment and give it an argument specifying the article it should show
-////                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-////                MessageFragment messageFragment = MessageFragment.newInstance((Channel) channelAdapter.getItem(position), currentUser);
-////                // Replace whatever is in the fragment_container view with this fragment,
-////                // and add the transaction to the back stack so the user can navigate back
-////                transaction.replace(R.id.fragment_container, messageFragment);
-////                transaction.addToBackStack(null);
-////                // Commit the transaction
-////                transaction.commit();
-//            }
-//        });
-
         lvChannel.setOnItemClickListener(((ChatFragmentActivity) getActivity()).onLvChannelItemClick);
 
         btFriends.setOnClickListener(((ChatFragmentActivity) getActivity()).onBtFriendClick);
-
-//        btFriends.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent friendsIntent = new Intent(getContext(), FriendsActivity.class);
-//                friendsIntent.putExtra("currentUser", currentUser);
-//                startActivity(friendsIntent);
-//            }
-//        });
 
         return v;
     }

@@ -115,37 +115,10 @@ public class ChatFragmentActivity extends AppCompatActivity {
                     .replace(R.id.fragment_container_main, channelListFragment)
                     .commit();
         }
-
-//        if (findViewById(R.id.channel_fragment) != null) {
-//            channelListFragment = (ChannelListFragment)getSupportFragmentManager().findFragmentById(R.id.channel_fragment);
-//            channelListFragment.setCurrentUser(currentUser);
-//            channelListFragment.getChannelList();
-//        }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        //getMenuInflater().inflate(R.menu.animalsmenu,menu);
-        return false;
     }
 
     @Override
     public void onBackPressed() {
-
-//        if(friendListFragment != null) {
-//            channelListFragment = ChannelListFragment.newInstance(currentUser);
-//            messageFragment = new MessageFragment();
-//            if (findViewById(R.id.fragment_container_side) != null) {
-//                getSupportFragmentManager().beginTransaction()
-//                        .replace(R.id.fragment_container_main, messageFragment)
-//                        .replace(R.id.fragment_container_side, channelListFragment)
-//                        .commit();
-//            } else {
-//                getSupportFragmentManager().beginTransaction()
-//                        .replace(R.id.fragment_container_main, channelListFragment)
-//                        .commit();
-//            }
-//        }
 
         int count = getFragmentManager().getBackStackEntryCount();
 
