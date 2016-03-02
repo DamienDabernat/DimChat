@@ -6,8 +6,11 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -35,7 +38,7 @@ import fr.dabernat.dimchat.server.ServiceInterface;
  * Use the {@link ChannelListFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ChannelListFragment extends Fragment {
+public class ChannelListFragment extends Fragment implements SearchView.OnQueryTextListener {
 
     private static final String TAG = "ChannelListFragment";
 
@@ -73,6 +76,9 @@ public class ChannelListFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        setHasOptionsMenu(true);
+
         if (getArguments() != null) {
             currentUser = (CurrentUser) getArguments().getSerializable(CURRENT_USER);
             if(currentUser == null){
@@ -131,6 +137,13 @@ public class ChannelListFragment extends Fragment {
         return v;
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_channel, menu);
+        SearchView searchView = (SearchView)menu.findItem(R.id.grid_default_search).getActionView();
+        searchView.setOnQueryTextListener(this);
+    }
+
     public void getChannelList() {
         HashMap<String, String> params = new HashMap<>();
         params.put("accesstoken", currentUser.getToken());
@@ -166,5 +179,17 @@ public class ChannelListFragment extends Fragment {
 
     public void setCurrentUser(CurrentUser currentUser) {
         this.currentUser = currentUser;
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        channelAdapter.setSearchResult(query);
+        return true;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        channelAdapter.setSearchResult(newText);
+        return true;
     }
 }

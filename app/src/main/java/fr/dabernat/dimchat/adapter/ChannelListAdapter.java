@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import fr.dabernat.dimchat.R;
@@ -16,10 +17,25 @@ public class ChannelListAdapter extends BaseAdapter {
 
     private Context context;
     private List<Channel> channelList;
+    private List<Channel> originalChannelList;
+
 
     public ChannelListAdapter(Context context, List<Channel> channelList) {
         this.context = context;
         this.channelList = channelList;
+        this.originalChannelList = channelList;
+    }
+
+    public void setSearchResult(String query) {
+        List<Channel> resultChannelList = new ArrayList<>();
+        for(Channel channel : originalChannelList) {
+            if(channel.getName().toLowerCase().contains(query.toLowerCase())) {
+                resultChannelList.add(channel);
+            }
+        }
+
+        this.channelList = resultChannelList;
+        notifyDataSetChanged();
     }
 
     @Override
