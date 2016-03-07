@@ -3,14 +3,10 @@ package fr.dabernat.dimchat.helper;
 import android.util.Log;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import fr.dabernat.dimchat.model.Message;
 
-/**
- * Created by Utilisateur on 01/03/2016.
- */
 public class MessageHelper {
 
     private static final String TAG = "MessageHelper";
@@ -20,15 +16,10 @@ public class MessageHelper {
         List<Message> newMessage = new ArrayList<>();
 
         if(oldList.size() > 0) {
-//            Log.w(TAG, "getNewMessage: liste old taille : " + oldList.size() );
 
             Message lastOldMessage = oldList.get(oldList.size()-1);
             Message newLastMessage = newList.get(newList.size()-1);
 
-//            Log.w(TAG, "getNewMessage: " + oldList.toString() );
-//
-//            Log.w(TAG, "getNewMessage: old last message" + lastOldMessage );
-//            Log.w(TAG, "getNewMessage: new last message" + newLastMessage );
 
             int lastIndex = newList.lastIndexOf(lastOldMessage);
 

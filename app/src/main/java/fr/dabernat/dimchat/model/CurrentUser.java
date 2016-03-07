@@ -2,9 +2,6 @@ package fr.dabernat.dimchat.model;
 
 import java.io.Serializable;
 
-/**
- * Created by Utilisateur on 02/02/2016.
- */
 public class CurrentUser extends User implements Serializable {
 
     public String password;

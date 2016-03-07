@@ -30,7 +30,6 @@ public class LoginActivity extends AppCompatActivity {
 
     private LinearLayout llLoading;
     private LinearLayout llConnexion;
-    private NewtonCradleLoading newtonCradleLoading;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +37,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         llLoading = (LinearLayout) findViewById(R.id.llLoading);
-        newtonCradleLoading = (NewtonCradleLoading) findViewById(R.id.newton_cradle_loading);
+        NewtonCradleLoading newtonCradleLoading = (NewtonCradleLoading) findViewById(R.id.newton_cradle_loading);
         newtonCradleLoading.start();
 
         llConnexion = (LinearLayout) findViewById(R.id.llConnexion);

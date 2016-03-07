@@ -10,7 +10,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:weightSum="12"
-        android:gravity="center">
+        android:gravity="center"
+        android:baselineAligned="false">
 
         <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/fragment_container_side"
@@ -23,18 +24,6 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_weight="4" />
-
-    <!--<fragment android:name="fr.dabernat.dimchat.fragment.ChannelListFragment"-->
-        <!--android:id="@+id/channel_fragment"-->
-        <!--android:layout_width="fill_parent"-->
-        <!--android:layout_height="fill_parent"-->
-        <!--android:layout_weight="8" />-->
-
-    <!--<fragment android:name="fr.dabernat.dimchat.fragment.MessageFragment"-->
-        <!--android:id="@+id/message_fragment"-->
-        <!--android:layout_width="fill_parent"-->
-        <!--android:layout_height="fill_parent"-->
-        <!--android:layout_weight="4" />-->
 
     </LinearLayout>
 

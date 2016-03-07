@@ -6,5 +6,9 @@
 
     <string name="action_settings">Settings</string>
     <string name="action_search">Rechercher un channel...</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="no_friends">Vous n\'avez pas encore ajouté d\'amis :(</string>
+    <string name="password">Mot de passe</string>
+    <string name="connexion">Connexion</string>
 
 </resources>

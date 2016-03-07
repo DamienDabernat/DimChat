@@ -26,13 +26,9 @@ import java.util.List;
 
 import fr.dabernat.dimchat.R;
 import fr.dabernat.dimchat.model.CurrentUser;
-import fr.dabernat.dimchat.model.Message;
 import fr.dabernat.dimchat.model.User;
 import fr.dabernat.dimchat.utils.ImageConverter;
 
-/**
- * Created by Utilisateur on 08/02/2016.
- */
 public class FriendsListAdapter extends BaseAdapter {
 
     private Context context;
@@ -72,7 +68,7 @@ public class FriendsListAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View view = convertView;
-        ViewHolder holder = null;
+        ViewHolder holder;
         if (view == null) {
             view = mLayoutInflater.inflate(R.layout.adapter_friends, parent, false);
             holder = new ViewHolder(view);
@@ -98,6 +94,52 @@ public class FriendsListAdapter extends BaseAdapter {
         }
 
         return view;
+    }
+
+    public Bitmap getBitmapFromURL(String src, String fileName) {
+        try {
+            URL url = new URL(src);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setDoInput(true);
+            connection.connect();
+            InputStream input = connection.getInputStream();
+            Bitmap myBitmap = BitmapFactory.decodeStream(input);
+            saveToInternalStorage(myBitmap, fileName);
+            return myBitmap;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private String saveToInternalStorage(Bitmap bitmapImage, String fileName) {
+        ContextWrapper cw = new ContextWrapper(context);
+        // path to /data/data/yourapp/app_data/imageDir
+        File directory = cw.getDir("DimChat", Context.MODE_PRIVATE);
+        // Create imageDir
+        File mypath=new File(directory, fileName + ".png");
+
+        FileOutputStream fos;
+        try {
+            fos = new FileOutputStream(mypath);
+            bitmapImage.compress(Bitmap.CompressFormat.JPEG, 80, fos);
+            fos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return directory.getAbsolutePath();
+    }
+
+    private Bitmap loadImageFromStorage(String path, String fileName)
+    {
+        try {
+            File f = new File(path, fileName + ".png");
+            return BitmapFactory.decodeStream(new FileInputStream(f));
+        }
+        catch (FileNotFoundException e)
+        {
+            return null;
+        }
     }
 
     static class ViewHolder {
@@ -132,53 +174,6 @@ public class FriendsListAdapter extends BaseAdapter {
         @Override
         protected void onPostExecute(Bitmap result) {
             imageView.setImageBitmap(result);
-        }
-    }
-
-
-    public Bitmap getBitmapFromURL(String src, String fileName) {
-        try {
-            URL url = new URL(src);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setDoInput(true);
-            connection.connect();
-            InputStream input = connection.getInputStream();
-            Bitmap myBitmap = BitmapFactory.decodeStream(input);
-            saveToInternalStorage(myBitmap, fileName);
-            return myBitmap;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    private String saveToInternalStorage(Bitmap bitmapImage, String fileName) {
-        ContextWrapper cw = new ContextWrapper(context);
-        // path to /data/data/yourapp/app_data/imageDir
-        File directory = cw.getDir("DimChat", Context.MODE_PRIVATE);
-        // Create imageDir
-        File mypath=new File(directory, fileName + ".png");
-
-        FileOutputStream fos = null;
-        try {
-            fos = new FileOutputStream(mypath);
-            bitmapImage.compress(Bitmap.CompressFormat.JPEG, 80, fos);
-            fos.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return directory.getAbsolutePath();
-    }
-
-    private Bitmap loadImageFromStorage(String path, String fileName)
-    {
-        try {
-            File f = new File(path, fileName + ".png");
-            return BitmapFactory.decodeStream(new FileInputStream(f));
-        }
-        catch (FileNotFoundException e)
-        {
-            return null;
         }
     }
 

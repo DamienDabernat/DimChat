@@ -2,9 +2,6 @@ package fr.dabernat.dimchat.model;
 
 import java.util.List;
 
-/**
- * Created by Utilisateur on 08/02/2016.
- */
 public class ChannelList {
 
     private List<Channel> channels;

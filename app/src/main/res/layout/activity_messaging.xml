@@ -5,64 +5,9 @@
     android:layout_height="match_parent"
     tools:context=".activity.MessagingActivity">
 
-    <ListView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/lvMessage"
-        android:layout_centerHorizontal="true"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:layout_above="@+id/linearLayout2"
-        android:layout_alignEnd="@id/linearLayout2" />
-
-    <LinearLayout
-        android:orientation="horizontal"
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/fragment_container_main"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:id="@+id/linearLayout2"
-        android:transcriptMode="alwaysScroll"
-        android:stackFromBottom="true"
-        android:background="@color/colorPrimaryDark"
-        android:paddingBottom="10dp">
-
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/etMessage"
-            android:layout_gravity="bottom"
-            android:layout_weight="1"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="10dp"
-            android:textColor="@color/abc_primary_text_material_dark" />
-
-        <ImageButton
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:id="@+id/btSend"
-            android:src="@drawable/send"
-            android:background="@android:color/transparent"
-            android:scaleType="fitCenter"
-            android:layout_margin="5dp"
-            android:padding="5dp" />
-    </LinearLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#3e7bc3"
-        android:id="@+id/rlLoading"
-        android:layout_alignBottom="@+id/lvMessage"
-        android:transitionGroup="false">
-
-        <com.victor.loading.newton.NewtonCradleLoading
-            android:id="@+id/newton_cradle_loading"
-            android:layout_width="wrap_content"
-            android:layout_height="150dp"
-            android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true"
-            />
-    </RelativeLayout>
+        android:layout_height="match_parent" />
 
 </RelativeLayout>

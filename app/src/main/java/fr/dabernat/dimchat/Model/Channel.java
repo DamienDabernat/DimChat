@@ -4,9 +4,6 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
-/**
- * Created by Utilisateur on 08/02/2016.
- */
 public class Channel implements Serializable {
 
     private int channelID;
@@ -14,9 +11,6 @@ public class Channel implements Serializable {
 
     @SerializedName("connectedusers")
     private int connectedUsers;
-
-    public Channel() {
-    }
 
     public Channel(int channelID, String name, int connectedUsers) {
         this.channelID = channelID;

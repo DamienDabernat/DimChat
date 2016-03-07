@@ -1,9 +1,6 @@
 package fr.dabernat.dimchat.fragment;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -12,12 +9,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.victor.loading.newton.NewtonCradleLoading;
@@ -27,13 +22,12 @@ import java.util.HashMap;
 import java.util.List;
 
 import fr.dabernat.dimchat.R;
+import fr.dabernat.dimchat.activity.ChatFragmentActivity;
 import fr.dabernat.dimchat.adapter.MessagingListAdapter;
-import fr.dabernat.dimchat.database.table.UserTable;
 import fr.dabernat.dimchat.model.Channel;
 import fr.dabernat.dimchat.model.CurrentUser;
 import fr.dabernat.dimchat.model.Message;
 import fr.dabernat.dimchat.model.MessageList;
-import fr.dabernat.dimchat.model.User;
 import fr.dabernat.dimchat.server.OnServiceListener;
 import fr.dabernat.dimchat.server.ServiceInterface;
 
@@ -45,19 +39,17 @@ import fr.dabernat.dimchat.server.ServiceInterface;
  */
 public class MessageFragment extends Fragment {
 
-    private static final String TAG = "MessageFragment";
-
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     public static final String CHANNEL = "channel";
     public static final String CURRENT_USER = "current_user";
-
+    private static final String TAG = "MessageFragment";
+    public MessagingListAdapter messagingListAdapter;
     private ListView lvMessage;
     private NewtonCradleLoading newtonCradleLoading;
     private RelativeLayout rlLoading;
     private RelativeLayout rlNoChannel;
     private Channel channel;
     private CurrentUser currentUser;
-    private MessagingListAdapter messagingListAdapter;
     private Handler handler;
     private Runnable runnable;
     private Boolean firstLaunch = true;
@@ -77,7 +69,7 @@ public class MessageFragment extends Fragment {
     public static MessageFragment newInstance(Channel channel, CurrentUser currentUser) {
         MessageFragment fragment = new MessageFragment();
         Bundle args = new Bundle();
-        args.putSerializable(MessageFragment.CHANNEL, (Channel) channel);
+        args.putSerializable(MessageFragment.CHANNEL, channel);
         args.putSerializable(MessageFragment.CURRENT_USER, currentUser);
         fragment.setArguments(args);
         return fragment;
@@ -111,32 +103,7 @@ public class MessageFragment extends Fragment {
         lvMessage.setTranscriptMode(ListView.TRANSCRIPT_MODE_NORMAL);
         lvMessage.setStackFromBottom(true);
 
-        lvMessage.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                builder.setMessage("Voulez-vous vraiment ajouter cet utilisateur à votre liste d'amis ?")
-                        .setTitle("Ajouter un ami")
-                        .setPositiveButton("Oui", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                // ADD ZE FRIEND Lelz !
-                                Message message = (Message) messagingListAdapter.getItem(position);
-                                Log.w(TAG, "onClick: " + message.toString());
-                                User user = new User(message.getUserID(), message.getUsername(), message.getDate(), message.getImageUrl());
-                                UserTable.insert(user);
-                                Toast.makeText(getActivity(), message.getUsername() + " ajouté(e) en ami(e)", Toast.LENGTH_SHORT).show();
-                            }
-                        })
-                        .setNegativeButton("Non", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                // User cancelled the dialog
-                                //Do NOTHING LEL
-                            }
-                        });
-                builder.show();
-                return true;
-            }
-        });
+        lvMessage.setOnItemLongClickListener(((ChatFragmentActivity) getActivity()).onItemLongClickMessageListener);
 
         final EditText etMessage = (EditText) view.findViewById(R.id.etMessage);
         etMessage.setOnClickListener(new View.OnClickListener() {
@@ -154,6 +121,8 @@ public class MessageFragment extends Fragment {
                 params.put("accesstoken", currentUser.getToken());
                 params.put("channelid", String.valueOf(channel.getChannelID()));
                 params.put("message", etMessage.getText().toString());
+                params.put("latitude", String.valueOf(((ChatFragmentActivity) getActivity()).mLatitude));
+                params.put("longitude", String.valueOf(((ChatFragmentActivity) getActivity()).mLongitude));
 
                 ServiceInterface serviceInterface = new ServiceInterface("POST", "messaging/", "sendmessage", params);
                 serviceInterface.setOnServiceListener(new OnServiceListener() {
@@ -189,8 +158,8 @@ public class MessageFragment extends Fragment {
         handler = new Handler();
         runnable = new Runnable() {
             public void run() {
-                if(currentUser == null || channel == null) {
-                    rlNoChannel = (RelativeLayout) view.findViewById(R.id.rlNoChannel);
+                rlNoChannel = (RelativeLayout) view.findViewById(R.id.rlNoChannel);
+                if (currentUser == null || channel == null) {
                     rlNoChannel.setVisibility(View.VISIBLE);
                 } else {
                     rlNoChannel.setVisibility(View.INVISIBLE);
@@ -223,7 +192,7 @@ public class MessageFragment extends Fragment {
         serviceInterface.setOnServiceListener(new OnServiceListener() {
             @Override
             public void onResult(String response) {
-                if(!response.isEmpty()) {
+                if (!response.isEmpty()) {
                     newtonCradleLoading.stop();
                     rlLoading.setVisibility(View.INVISIBLE);
                     Gson gson = new Gson();
@@ -234,7 +203,7 @@ public class MessageFragment extends Fragment {
                     //messagingListAdapter.addList(newMessageList);
                     messagingListAdapter.setMessageList(messages);
                     messagingListAdapter.notifyDataSetChanged();
-                    if(firstLaunch) {
+                    if (firstLaunch) {
                         lvMessage.setSelection(messagingListAdapter.getCount() - 1);
                         firstLaunch = false;
                     }
@@ -260,7 +229,7 @@ public class MessageFragment extends Fragment {
      * Hides the soft keyboard
      */
     public void hideSoftKeyboard() {
-        if(getActivity().getCurrentFocus()!=null) {
+        if (getActivity().getCurrentFocus() != null) {
             InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(getActivity().INPUT_METHOD_SERVICE);
             inputMethodManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
         }

@@ -24,10 +24,7 @@
             <com.victor.loading.newton.NewtonCradleLoading
                 android:id="@+id/newton_cradle_loading"
                 android:layout_width="wrap_content"
-                android:layout_height="150dp"
-                android:layout_centerVertical="true"
-                android:layout_centerHorizontal="true"
-                />
+                android:layout_height="150dp" />
 
         </LinearLayout>
 
@@ -76,7 +73,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="6"
                     android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="Mot de passe"
+                    android:text="@string/password"
                     android:id="@+id/tvPassword"
                     android:paddingRight="60dp"
                     android:gravity="right" />
@@ -93,7 +90,7 @@
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Connexion"
+                android:text="@string/connexion"
                 android:id="@+id/btConnexion"
                 android:layout_gravity="center_horizontal"
                 android:background="@color/colorPrimary"

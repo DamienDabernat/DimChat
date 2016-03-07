@@ -4,7 +4,6 @@ import java.util.HashMap;
 
 public class ServiceInterface {
 
-    public static final String LOG_TAG = "ServerInterface";
     private static final String SERVER_URL = "http://raphaelbischof.fr/";
 
     private String method;
@@ -25,7 +24,7 @@ public class ServiceInterface {
     }
 
     public void execute() {
-         if (method == "POST" || method == "PUT" || method == "DELETE") {
+         if (method.equals("POST") || method.equals("PUT") || method.equals("DELETE")) {
             String data = query + "?";
             data += "function=" + function;
 

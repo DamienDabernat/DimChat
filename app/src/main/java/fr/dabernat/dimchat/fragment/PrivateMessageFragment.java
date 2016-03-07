@@ -76,7 +76,7 @@ public class PrivateMessageFragment extends Fragment {
     public static PrivateMessageFragment newInstance(User userFriend, CurrentUser currentUser) {
         PrivateMessageFragment fragment = new PrivateMessageFragment();
         Bundle args = new Bundle();
-        args.putSerializable(PrivateMessageFragment.USER_FRIEND, (User) userFriend);
+        args.putSerializable(PrivateMessageFragment.USER_FRIEND, userFriend);
         args.putSerializable(PrivateMessageFragment.CURRENT_USER, currentUser);
         fragment.setArguments(args);
         return fragment;

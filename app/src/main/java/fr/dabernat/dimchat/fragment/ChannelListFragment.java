@@ -1,10 +1,8 @@
 package fr.dabernat.dimchat.fragment;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
@@ -24,9 +22,7 @@ import java.util.HashMap;
 
 import fr.dabernat.dimchat.R;
 import fr.dabernat.dimchat.activity.ChatFragmentActivity;
-import fr.dabernat.dimchat.activity.FriendsActivity;
 import fr.dabernat.dimchat.adapter.ChannelListAdapter;
-import fr.dabernat.dimchat.model.Channel;
 import fr.dabernat.dimchat.model.ChannelList;
 import fr.dabernat.dimchat.model.CurrentUser;
 import fr.dabernat.dimchat.server.OnServiceListener;

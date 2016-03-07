@@ -1,7 +1,6 @@
 package fr.dabernat.dimchat.server;
 
 import android.os.AsyncTask;
-import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -17,8 +16,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ServiceProvider extends AsyncTask<String, String, String> {
-
-    private static final String LOG_TAG = "ServiceProvider";
 
     private String method;
     private String urlString;
