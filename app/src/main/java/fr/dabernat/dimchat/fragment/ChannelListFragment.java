@@ -1,6 +1,8 @@
 package fr.dabernat.dimchat.fragment;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -12,6 +14,7 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
@@ -22,6 +25,7 @@ import java.util.HashMap;
 
 import fr.dabernat.dimchat.R;
 import fr.dabernat.dimchat.activity.ChatFragmentActivity;
+import fr.dabernat.dimchat.activity.PrivateChatFragmentActivity;
 import fr.dabernat.dimchat.adapter.ChannelListAdapter;
 import fr.dabernat.dimchat.model.ChannelList;
 import fr.dabernat.dimchat.model.CurrentUser;
@@ -38,7 +42,6 @@ public class ChannelListFragment extends Fragment implements SearchView.OnQueryT
 
     private static final String TAG = "ChannelListFragment";
 
-    // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     public static final String CURRENT_USER = "current_user";
 
@@ -50,7 +53,7 @@ public class ChannelListFragment extends Fragment implements SearchView.OnQueryT
     private RelativeLayout rlLoading;
 
     public ChannelListFragment() {
-        // Required empty public constructor
+        setHasOptionsMenu(true);
     }
 
     /**
@@ -60,32 +63,12 @@ public class ChannelListFragment extends Fragment implements SearchView.OnQueryT
      * @param currentUser Parameter 1.
      * @return A new instance of fragment ChannelListFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static ChannelListFragment newInstance(CurrentUser currentUser) {
         ChannelListFragment fragment = new ChannelListFragment();
         Bundle args = new Bundle();
         args.putSerializable(CURRENT_USER, currentUser);
         fragment.setArguments(args);
         return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        setHasOptionsMenu(true);
-
-        if (getArguments() != null) {
-            currentUser = (CurrentUser) getArguments().getSerializable(CURRENT_USER);
-            if(currentUser == null){
-                final SharedPreferences prefs = getActivity().getSharedPreferences(
-                        "fr.dabernat.dimchat", Context.MODE_PRIVATE);
-                    currentUser.setPseudo(prefs.getString("username", ""));
-                    currentUser.setPassword(prefs.getString("password", ""));
-                    currentUser.setToken(prefs.getString("token", ""));
-            }
-            Log.w(TAG, "onCreate: " + currentUser.toString() + getArguments().toString());
-        }
     }
 
     @Override
@@ -104,16 +87,16 @@ public class ChannelListFragment extends Fragment implements SearchView.OnQueryT
 
         lvChannel.setOnItemClickListener(((ChatFragmentActivity) getActivity()).onLvChannelItemClick);
 
-        btFriends.setOnClickListener(((ChatFragmentActivity) getActivity()).onBtFriendClick);
+        btFriends.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent privateChatFragmentActivity = new Intent(getContext(), PrivateChatFragmentActivity.class);
+                privateChatFragmentActivity.putExtra("currentUser", currentUser);
+                startActivity(privateChatFragmentActivity);
+            }
+        });
 
         return v;
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_channel, menu);
-        SearchView searchView = (SearchView)menu.findItem(R.id.grid_default_search).getActionView();
-        searchView.setOnQueryTextListener(this);
     }
 
     public void getChannelList() {
@@ -138,6 +121,18 @@ public class ChannelListFragment extends Fragment implements SearchView.OnQueryT
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        if (getArguments() != null) {
+            currentUser = (CurrentUser) getArguments().getSerializable(CURRENT_USER);
+            if(currentUser == null){
+                currentUser = new CurrentUser();
+                final SharedPreferences prefs = getActivity().getSharedPreferences(
+                        "fr.dabernat.dimchat", Context.MODE_PRIVATE);
+                currentUser.setPseudo(prefs.getString("username", ""));
+                currentUser.setPassword(prefs.getString("password", ""));
+                currentUser.setToken(prefs.getString("token", ""));
+            }
+            Log.w(TAG, "onCreate: " + currentUser.toString() + getArguments().toString());
+        }
     }
 
     @Override
@@ -161,7 +156,9 @@ public class ChannelListFragment extends Fragment implements SearchView.OnQueryT
 
     @Override
     public boolean onQueryTextChange(String newText) {
-        channelAdapter.setSearchResult(newText);
+        //if(channelAdapter != null) {
+            channelAdapter.setSearchResult(newText);
+        //}
         return true;
     }
 }

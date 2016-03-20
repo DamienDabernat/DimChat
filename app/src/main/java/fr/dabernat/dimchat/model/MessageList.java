@@ -2,6 +2,7 @@ package fr.dabernat.dimchat.model;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -13,6 +14,7 @@ public class MessageList {
     private List<Message> messageList;
 
     public MessageList() {
+        messageList = new ArrayList<>();
     }
 
     public MessageList(List<Message> messageList) {

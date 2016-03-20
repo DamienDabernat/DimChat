@@ -15,25 +15,16 @@
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center"
-            android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true"
-            android:id="@+id/llLoading"
-            android:background="@color/colorPrimary">
-
-            <com.victor.loading.newton.NewtonCradleLoading
-                android:id="@+id/newton_cradle_loading"
-                android:layout_width="wrap_content"
-                android:layout_height="150dp" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
             android:id="@+id/llConnexion"
             android:padding="16dp">
+
+            <ImageView
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:id="@+id/imageView"
+                android:src="@drawable/logo"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="16dp" />
 
             <LinearLayout
                 android:orientation="horizontal"
@@ -96,6 +87,23 @@
                 android:background="@color/colorPrimary"
                 android:textColor="@color/abc_primary_text_material_dark"
                 android:layout_marginTop="20dp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/llLoading"
+            android:background="#4A90E2">
+
+            <com.victor.loading.newton.NewtonCradleLoading
+                android:id="@+id/newton_cradle_loading"
+                android:layout_width="wrap_content"
+                android:layout_height="150dp" />
 
         </LinearLayout>
 

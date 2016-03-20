@@ -24,8 +24,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
 
-        mLatitude = getIntent().getDoubleExtra("latitude", 0);
-        mLongitude = getIntent().getDoubleExtra("longitude", 0);
+        mLatitude = Double.parseDouble(getIntent().getStringExtra("latitude"));
+        mLongitude = Double.parseDouble(getIntent().getStringExtra("longitude"));
         mTitle = getIntent().getStringExtra("title");
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.

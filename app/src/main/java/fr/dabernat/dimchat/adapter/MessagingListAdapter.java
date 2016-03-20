@@ -5,13 +5,18 @@ import android.content.ContextWrapper;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
+import android.media.MediaPlayer;
 import android.os.AsyncTask;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -38,6 +43,8 @@ public class MessagingListAdapter extends BaseAdapter {
     private Context context;
     private List<Message> messageList;
     private LayoutInflater mLayoutInflater;
+    private Boolean isPlaying = false;
+    private MediaPlayer mp = new MediaPlayer();
 
     public MessagingListAdapter(Context context) {
         mLayoutInflater = LayoutInflater.from(context);
@@ -82,24 +89,82 @@ public class MessagingListAdapter extends BaseAdapter {
 
         View view = convertView;
         ViewHolder holder = null;
-        if (view == null) {
+
+        String photoUrl = messageList.get(position).getMessageImageUrl();
+        final String soundUrl = messageList.get(position).getSoundUrl();
+
+//        if (photoUrl.isEmpty() || photoUrl == null) {
+//            view = null;
+//        }
+
+//        if (view == null) {
             if (messageList.get(position).getSendbyme() == 1) {
-                view = mLayoutInflater.inflate(R.layout.adapter_messaging_from_current_user, parent, false);
+                if (!photoUrl.isEmpty()) {
+                    view = mLayoutInflater.inflate(R.layout.adapter_messaging_from_current_user_photo, parent, false);
+                } else if (!soundUrl.isEmpty()){
+                    view = mLayoutInflater.inflate(R.layout.adapter_messaging_from_current_user_sound, parent, false);
+                } else {
+                    view = mLayoutInflater.inflate(R.layout.adapter_messaging_from_current_user, parent, false);
+                }
             } else {
-                view = mLayoutInflater.inflate(R.layout.adapter_messaging, parent, false);
+                if (!photoUrl.isEmpty()) {
+                    view = mLayoutInflater.inflate(R.layout.adapter_messaging_photo, parent, false);
+                } else if (!soundUrl.isEmpty()){
+                    view = mLayoutInflater.inflate(R.layout.adapter_messaging_sound, parent, false);
+                } else {
+                    view = mLayoutInflater.inflate(R.layout.adapter_messaging, parent, false);
+                }
             }
             holder = new ViewHolder(view);
             view.setTag(holder);
-        } else {
-            holder = (ViewHolder) view.getTag();
-        }
+//        } else {
+//            holder = (ViewHolder) view.getTag();
+//        }
 
-        holder.tvText.setText(messageList.get(position).getMessage());
+        if (!photoUrl.isEmpty()) {
+            Picasso.with(context).load(photoUrl).into(holder.ivPhoto);
+        } else if (!soundUrl.isEmpty()) {
+            final ViewHolder finalHolder = holder;
+            holder.ibPlay.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
 
-        if (messageList.get(position).getEverRead() == 0) {
-            holder.tvText.setTypeface(null, Typeface.BOLD);
+                    if(!isPlaying) {
+                        mp.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                            @Override
+                            public void onPrepared(MediaPlayer mp) {
+                                mp.start();
+                                isPlaying = true;
+                                finalHolder.ibPlay.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_pause_dark));
+                            }
+                        });
+
+                        try {
+                            mp.setDataSource(soundUrl);
+                            mp.prepareAsync();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+
+                        mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                            @Override
+                            public void onCompletion(MediaPlayer mp) {
+                                finalHolder.ibPlay.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_play_arrow_white_48dp));
+                            }
+                        });
+                    } else {
+                        mp.stop();
+                    }
+
+                }
+            });
         } else {
-            holder.tvText.setTypeface(null, Typeface.NORMAL);
+            holder.tvText.setText(messageList.get(position).getMessage());
+            if (messageList.get(position).getEverRead() == 0) {
+                holder.tvText.setTypeface(null, Typeface.BOLD);
+            } else {
+                holder.tvText.setTypeface(null, Typeface.NORMAL);
+            }
         }
 
         holder.tvPseudo.setText(" " + messageList.get(position).getUsername());
@@ -170,15 +235,19 @@ public class MessagingListAdapter extends BaseAdapter {
     static class ViewHolder {
 
         ImageView ivProfil;
+        ImageView ivPhoto;
+        ImageButton ibPlay;
         TextView tvText;
         TextView tvPseudo;
         TextView tvDate;
 
         public ViewHolder(View view) {
+            ivPhoto = (ImageView) view.findViewById(R.id.ivPhoto);
             ivProfil = (ImageView) view.findViewById(R.id.ivProfil);
             tvText = (TextView) view.findViewById(R.id.tvText);
             tvPseudo = (TextView) view.findViewById(R.id.tvPseudo);
             tvDate = (TextView) view.findViewById(R.id.tvDate);
+            ibPlay = (ImageButton) view.findViewById(R.id.ibPlay);
 
         }
 

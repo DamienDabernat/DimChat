@@ -188,8 +188,8 @@ public class PrivateMessageFragment extends Fragment {
         handler = new Handler();
         runnable = new Runnable() {
             public void run() {
+                rlNoChannel = (RelativeLayout) view.findViewById(R.id.rlNoChannel);
                 if(currentUser == null || userFriend == null) {
-                    rlNoChannel = (RelativeLayout) view.findViewById(R.id.rlNoChannel);
                     rlNoChannel.setVisibility(View.VISIBLE);
                 } else {
                     rlNoChannel.setVisibility(View.INVISIBLE);

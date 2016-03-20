@@ -14,6 +14,10 @@ public class Message implements Comparable {
     private String message;
     private String date;
     private String imageUrl;
+    private String soundUrl;
+    private String latitude;
+    private String longitude;
+    private String messageImageUrl;
 
     public Message() {
     }
@@ -80,6 +84,38 @@ public class Message implements Comparable {
 
     public void setEverRead(int everRead) {
         this.everRead = everRead;
+    }
+
+    public String getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
+    }
+
+    public String getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
+    }
+
+    public String getMessageImageUrl() {
+        return messageImageUrl;
+    }
+
+    public void setMessageImageUrl(String messageImageUrl) {
+        this.messageImageUrl = messageImageUrl;
+    }
+
+    public String getSoundUrl() {
+        return soundUrl;
+    }
+
+    public void setSoundUrl(String soundUrl) {
+        this.soundUrl = soundUrl;
     }
 
     @Override

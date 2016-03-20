@@ -17,6 +17,7 @@ import java.util.List;
 
 import fr.dabernat.dimchat.R;
 import fr.dabernat.dimchat.activity.ChatFragmentActivity;
+import fr.dabernat.dimchat.activity.PrivateChatFragmentActivity;
 import fr.dabernat.dimchat.adapter.FriendsListAdapter;
 import fr.dabernat.dimchat.database.table.UserTable;
 import fr.dabernat.dimchat.model.CurrentUser;
@@ -58,7 +59,7 @@ public class FriendListFragment extends Fragment {
             glFriends.setAdapter(friendsListAdapter);
             friendsListAdapter.notifyDataSetChanged();
 
-            glFriends.setOnItemClickListener(((ChatFragmentActivity) getActivity()).onGvFriendItemClick);
+            glFriends.setOnItemClickListener(((PrivateChatFragmentActivity) getActivity()).onGvFriendItemClick);
 
             glFriends.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
                 @Override

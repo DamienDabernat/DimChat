@@ -1,7 +1,9 @@
 package fr.dabernat.dimchat.activity;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -16,7 +18,21 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 import fr.dabernat.dimchat.R;
+import fr.dabernat.dimchat.fragment.MessageFragment;
+import fr.dabernat.dimchat.server.UploadFileToServer;
+import fr.dabernat.dimchat.utils.ImageConverter;
 
 public class GpsActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, OnConnectionFailedListener, LocationListener {
 
@@ -30,7 +46,6 @@ public class GpsActivity extends AppCompatActivity implements GoogleApiClient.Co
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_gps);
 
         // Create an instance of GoogleAPIClient.
         if (mGoogleApiClient == null) {
@@ -56,9 +71,9 @@ public class GpsActivity extends AppCompatActivity implements GoogleApiClient.Co
         }
 
         LocationRequest mLocationRequest = new LocationRequest();
-        mLocationRequest.setInterval(10000);
+        mLocationRequest.setInterval(30000);
         //Correspond à l’intervalle moyen de temps entre chaque mise à jour des coordonnées
-        mLocationRequest.setFastestInterval(5000);
+        mLocationRequest.setFastestInterval(15000);
         //Correspond à l’intervalle le plus rapide entre chaque mise à jour des coordonnées
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         //Définit la demande de mise à jour avec un niveau de précision maximal
@@ -84,13 +99,13 @@ public class GpsActivity extends AppCompatActivity implements GoogleApiClient.Co
     }
 
     protected void onStart() {
-        mGoogleApiClient.connect();
         super.onStart();
+        mGoogleApiClient.connect();
     }
 
     protected void onStop() {
-        mGoogleApiClient.disconnect();
         super.onStop();
+        mGoogleApiClient.disconnect();
     }
 
     @Override

@@ -2,6 +2,7 @@ package fr.dabernat.dimchat.activity;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
 
 import fr.dabernat.dimchat.R;
 import fr.dabernat.dimchat.fragment.PrivateMessageFragment;
@@ -25,5 +26,10 @@ public class PrivateMessagingActivity extends ChatFragmentActivity {
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container_main, privateMessageFragment)
                 .commit();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        return false;
     }
 }

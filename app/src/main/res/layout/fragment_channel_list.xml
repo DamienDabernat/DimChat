@@ -10,14 +10,6 @@
         android:layout_height="match_parent"
         tools:context=".activity.ChatFragmentActivity">
 
-        <ListView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/lvChannel"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:layout_above="@+id/btFriends" />
-
         <Button
             android:layout_width="match_parent"
             android:layout_height="55dp"
@@ -31,20 +23,30 @@
             android:gravity="center"
             android:textStyle="bold" />
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/colorPrimary"
-            android:id="@+id/rlLoading">
-
-            <com.victor.loading.newton.NewtonCradleLoading
-                android:id="@+id/newton_cradle_loading"
-                android:layout_width="wrap_content"
-                android:layout_height="150dp"
-                android:layout_centerVertical="true"
-                android:layout_centerHorizontal="true"
-                />
-        </RelativeLayout>
+        <ListView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/lvChannel"
+            android:layout_centerHorizontal="true"
+            android:layout_above="@+id/btFriends"
+            android:layout_alignParentTop="true" />
 
     </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorPrimary"
+        android:id="@+id/rlLoading"
+        android:visibility="visible">
+
+        <com.victor.loading.newton.NewtonCradleLoading
+            android:id="@+id/newton_cradle_loading"
+            android:layout_width="wrap_content"
+            android:layout_height="150dp"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            />
+    </RelativeLayout>
+
 </FrameLayout>

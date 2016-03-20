@@ -24,7 +24,7 @@ import fr.dabernat.dimchat.server.OnServiceListener;
 import fr.dabernat.dimchat.server.ServiceInterface;
 
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends NotificationActivity {
 
     private static final String TAG = "LoginActivity";
 
@@ -83,7 +83,7 @@ public class LoginActivity extends AppCompatActivity {
             HashMap<String, String> params = new HashMap<>();
             params.put("username", currentUser.getPseudo());
             params.put("password", currentUser.getPassword());
-
+            params.put("registrationid", getRegistrationId());
             prefs.edit().putString("username", currentUser.getPseudo()).apply();
             prefs.edit().putString("password", currentUser.getPassword()).apply();
 
@@ -100,6 +100,7 @@ public class LoginActivity extends AppCompatActivity {
                             currentUser.setToken(json.get("accesstoken").toString());
                             Intent channelListIntent = new Intent(LoginActivity.this, ChatFragmentActivity.class);
                             channelListIntent.putExtra("currentUser", currentUser);
+                            channelListIntent.putExtra("test", json.get("accesstoken").toString());
                             startActivity(channelListIntent);
                             finish();
                         } else {

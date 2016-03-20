@@ -1,13 +1,32 @@
 package fr.dabernat.dimchat.activity;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.PersistableBundle;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Toast;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 import fr.dabernat.dimchat.R;
 import fr.dabernat.dimchat.database.table.UserTable;
@@ -19,88 +38,30 @@ import fr.dabernat.dimchat.model.Channel;
 import fr.dabernat.dimchat.model.CurrentUser;
 import fr.dabernat.dimchat.model.Message;
 import fr.dabernat.dimchat.model.User;
+import fr.dabernat.dimchat.server.UploadFileToServer;
+import fr.dabernat.dimchat.utils.ImageConverter;
 
 public class ChatFragmentActivity extends GpsActivity {
 
     private static final String TAG = "ChatFragmentActivity";
 
     protected ChannelListFragment channelListFragment;
-    protected FriendListFragment friendListFragment;
     protected MessageFragment messageFragment;
-
-    public AdapterView.OnItemLongClickListener onItemLongClickMessageListener = new AdapterView.OnItemLongClickListener() {
-        @Override
-        public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
-
-            String[] listOfOtpions = {"Ajouter en amis", "Voir sur la carte"};
-
-            AlertDialog.Builder builder = new AlertDialog.Builder(ChatFragmentActivity.this);
-            builder.setTitle("Ajouter un ami")
-                    .setItems(listOfOtpions, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            Message message = messageFragment.messagingListAdapter.getList().get(position);
-                            User user = new User(message.getUserID(), message.getUsername(), message.getDate(), message.getImageUrl());
-
-                            switch (which) {
-                                case 0:
-                                    // ADD ZE FRIEND Lelz !
-                                    UserTable.insert(user);
-                                    Toast.makeText(ChatFragmentActivity.this, message.getUsername() + " ajouté(e) en ami(e)", Toast.LENGTH_SHORT).show();
-                                    break;
-                                case 1:
-                                    Intent mapsIntent = new Intent(ChatFragmentActivity.this, MapsActivity.class);
-                                    mapsIntent.putExtra("latitude", user.getLatitude());
-                                    mapsIntent.putExtra("longitude", user.getLongitude());
-                                    mapsIntent.putExtra("title", user.getPseudo());
-                                    startActivity(mapsIntent);
-                                    break;
-                                default:
-                                    Intent gpsIntent = new Intent(ChatFragmentActivity.this, GpsActivity.class);
-                                    startActivity(gpsIntent);
-                                    break;
-                            }
-                        }
-                    });
-            builder.show();
-            return true;
-        }
-    };
-    private PrivateMessageFragment privateMessageFragment;
-    public View.OnClickListener onBtFriendClick = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-
-            friendListFragment = new FriendListFragment();
-            privateMessageFragment = new PrivateMessageFragment();
-
-            if (findViewById(R.id.fragment_container_side) != null) {
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_container_main, privateMessageFragment)
-                        .replace(R.id.fragment_container_side, friendListFragment)
-                        .addToBackStack(null)
-                        .commit();
-            } else {
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_container_main, friendListFragment)
-                        .addToBackStack(null)
-                        .commit();
-//                Intent friendsIntent = new Intent(ChatFragmentActivity.this, FriendsActivity.class);
-//                friendsIntent.putExtra("currentUser", currentUser);
-//                startActivity(friendsIntent);
-            }
-        }
-    };
     private CurrentUser currentUser;
+
     public AdapterView.OnItemClickListener onLvChannelItemClick = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
             if (messageFragment != null) {
                 if (findViewById(R.id.fragment_container_side) != null) {
+                    messageFragment = MessageFragment.newInstance((Channel) channelListFragment.getChannelAdapter().getItem(position), currentUser);
                     messageFragment.setChannel((Channel) channelListFragment.getChannelAdapter().getItem(position));
-                    messageFragment.setCurrentUser(currentUser);
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.fragment_container_main, messageFragment)
+                            .commit();
                 } else {
-                    Intent messagingIntent = new Intent(getApplicationContext(), MessagingActivity.class);
+                    Intent messagingIntent = new Intent(ChatFragmentActivity.this, MessagingActivity.class);
                     messagingIntent.putExtra("channel", (Channel) channelListFragment.getChannelAdapter().getItem(position));
                     messagingIntent.putExtra("currentUser", currentUser);
                     startActivity(messagingIntent);
@@ -108,22 +69,7 @@ public class ChatFragmentActivity extends GpsActivity {
             }
         }
     };
-    public AdapterView.OnItemClickListener onGvFriendItemClick = new AdapterView.OnItemClickListener() {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            if (friendListFragment != null) {
-                if (findViewById(R.id.fragment_container_side) != null) {
-                    privateMessageFragment.setUserFriend((User) friendListFragment.getFriendsListAdapter().getItem(position));
-                    privateMessageFragment.setCurrentUser(currentUser);
-                } else {
-                    Intent privateMessageIntent = new Intent(getApplicationContext(), PrivateMessagingActivity.class);
-                    privateMessageIntent.putExtra("userFriend", (User) friendListFragment.getFriendsListAdapter().getItem(position));
-                    privateMessageIntent.putExtra("currentUser", currentUser);
-                    startActivity(privateMessageIntent);
-                }
-            }
-        }
-    };
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,20 +80,46 @@ public class ChatFragmentActivity extends GpsActivity {
 
         Log.w(TAG, "onCreate: " + currentUser);
 
+        messageFragment = new MessageFragment();
         channelListFragment = ChannelListFragment.newInstance(currentUser);
 
-        messageFragment = new MessageFragment();
-
         if (findViewById(R.id.fragment_container_side) != null) {
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_container_main, messageFragment)
-                    .replace(R.id.fragment_container_side, channelListFragment)
-                    .commit();
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container_main, messageFragment)
+                        .replace(R.id.fragment_container_side, channelListFragment)
+                        .commit();
         } else {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_container_main, channelListFragment)
                     .commit();
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        getMenuInflater().inflate(R.menu.menu_channel, menu);
+            MenuItem searchItem = menu.findItem(R.id.grid_default_search);
+            SearchView searchView = (SearchView) searchItem.getActionView();
+            searchView.setOnQueryTextListener(channelListFragment);
+
+            return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId()==android.R.id.home){
+            onBackPressed();
+            return true;
+        }
+
+        if(item.getItemId()==R.id.show_friends) {
+            Intent privateChatFragmentActivity = new Intent(ChatFragmentActivity.this, PrivateChatFragmentActivity.class);
+            privateChatFragmentActivity.putExtra("currentUser", currentUser);
+            startActivity(privateChatFragmentActivity);
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
